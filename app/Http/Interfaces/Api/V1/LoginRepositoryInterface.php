@@ -8,5 +8,5 @@ use App\Models\User;
 
 interface LoginRepositoryInterface
 {
-    public function getUser(string $email, string $password): ?User;
+    public function getUser(string $email): ?User;
 }

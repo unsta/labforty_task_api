@@ -9,7 +9,7 @@ use App\Models\User;
 
 class LoginRepository implements LoginRepositoryInterface
 {
-    public function getUser(string $email, string $password): ?User
+    public function getUser(string $email): ?User
     {
         return User::where('email', $email)->first();
     }

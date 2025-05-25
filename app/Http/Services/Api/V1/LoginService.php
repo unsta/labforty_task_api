@@ -17,7 +17,7 @@ readonly class LoginService
 
     public function createToken(string $email, string $password): string
     {
-        $user = $this->repository->getUser($email, $password);
+        $user = $this->repository->getUser($email);
 
         if (null === $user || false === Hash::check($password, $user->password)) {
             throw new LoginException();
