@@ -6,6 +6,7 @@ namespace App\Http\Repositories\Api\V1;
 
 use App\DTOs\ListBookedHours\BookingHourDto as ListBookedHoursDto;
 use App\DTOs\StoreBookingHours\BookingHourDto;
+use App\Enums\BookingStatus;
 use App\Http\Exceptions\Api\V1\EntityNotFoundException;
 use App\Http\Interfaces\Api\V1\BookingHourRepositoryInterface;
 use App\Http\Resources\Api\V1\BookingHourResource;
@@ -75,5 +76,12 @@ class BookingHourRepository implements BookingHourRepositoryInterface
         return (new BookingHourResource($booking))->additional([
             'upcoming_bookings' => BookingHourResource::collection($upcomingBookings),
         ]);
+    }
+
+    public function softDelete(BookingHour $booking): void
+    {
+        $booking->status = BookingStatus::CANCELED->value;
+        $booking->save();
+        $booking->delete();
     }
 }

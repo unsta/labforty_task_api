@@ -17,4 +17,5 @@ interface BookingHourRepositoryInterface
     public function store(BookingHourDto $dto, int $timeSlotId): void;
     public function getAllBookings(ListBookedHoursDto $dto, ?string $egn): ResourceCollection;
     public function getCurrentAndUpcomingBookings(int $id): BookingHourResource;
+    public function softDelete(BookingHour $booking): void;
 }

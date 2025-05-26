@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\V1\DestroyBookingHourController;
 use App\Http\Controllers\Api\V1\ListBookingHoursController;
 use App\Http\Controllers\Api\V1\LoginController;
 use App\Http\Controllers\Api\V1\ShowBookingHourController;
@@ -16,6 +17,7 @@ Route::middleware(['throttle:api'])->group(function () {
             Route::get('/list-booking-hours', ListBookingHoursController::class);
             Route::get('/show-booking-hour/{id}', ShowBookingHourController::class);
             Route::patch('/update-booking-hour/{id}', UpdateBookingHourController::class);
+            Route::delete('/destroy-booking-hour/{id}', DestroyBookingHourController::class);
         });
     });
 });
