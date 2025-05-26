@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Http\Resources\Api\V1\ListBookedHours;
+namespace App\Http\Resources\Api\V1\ListBookingHours;
 
 use App\Enums\NotificationType;
 use Illuminate\Http\Request;

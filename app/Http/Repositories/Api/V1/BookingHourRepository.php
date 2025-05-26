@@ -7,7 +7,7 @@ namespace App\Http\Repositories\Api\V1;
 use App\DTOs\ListBookedHours\BookingHourDto as ListBookedHoursDto;
 use App\DTOs\StoreBookingHours\BookingHourDto;
 use App\Http\Interfaces\Api\V1\BookingHourRepositoryInterface;
-use App\Http\Resources\Api\V1\ListBookedHours\BookingHourResource;
+use App\Http\Resources\Api\V1\ListBookingHours\BookingHourResource;
 use App\Models\BookingHour;
 use Illuminate\Http\Resources\Json\ResourceCollection;
 

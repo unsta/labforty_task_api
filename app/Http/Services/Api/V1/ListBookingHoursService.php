@@ -10,7 +10,7 @@ use App\Http\Interfaces\Api\V1\PersonalDataRepositoryInterface;
 use App\Http\Interfaces\Api\V1\TimeSlotRepositoryInterface;
 use Illuminate\Http\Resources\Json\ResourceCollection;
 
-readonly class ListBookedHoursService
+readonly class ListBookingHoursService
 {
     public function __construct(
         public BookingHourRepositoryInterface $bookingHourRepository,

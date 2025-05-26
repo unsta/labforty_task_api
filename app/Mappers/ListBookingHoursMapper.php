@@ -5,11 +5,11 @@ declare(strict_types=1);
 namespace App\Mappers;
 
 use App\DTOs\ListBookedHours\{BookingHourDto, PersonalDataDto};
-use App\Http\Requests\Api\V1\ListBookedHoursRequest;
+use App\Http\Requests\Api\V1\ListBookingHoursRequest;
 
-readonly class ListBookedHoursMapper
+readonly class ListBookingHoursMapper
 {
-    public static function fromRequest(ListBookedHoursRequest $request): array
+    public static function fromRequest(ListBookingHoursRequest $request): array
     {
         $data = $request->validated();
 

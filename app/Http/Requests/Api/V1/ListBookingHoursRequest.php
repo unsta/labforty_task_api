@@ -7,7 +7,7 @@ namespace App\Http\Requests\Api\V1;
 use App\Rules\Egn;
 use Illuminate\Foundation\Http\FormRequest;
 
-class ListBookedHoursRequest extends FormRequest
+class ListBookingHoursRequest extends FormRequest
 {
     public function rules(): array
     {
