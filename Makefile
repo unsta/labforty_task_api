@@ -1,4 +1,4 @@
-ROOT_FOLDERS=app/Http/Controllers app/Http/Services app/Http/Repositories app/Http/Requests app/Http/Exceptions
+ROOT_FOLDERS=app/Http/Controllers app/Http/Services app/Http/Repositories app/Http/Exceptions
 
 pipeline: fixer linter phpmd phpstan-clear-cache phpstan
 

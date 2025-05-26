@@ -16,7 +16,7 @@ class BookingHour extends Model
     protected $fillable = [
         'booking_date',
         'time_slot_id',
-        'client_id',
+        'user_id',
         'description',
         'notification_types',
         'status',

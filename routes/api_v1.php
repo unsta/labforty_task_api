@@ -1,13 +1,16 @@
 <?php
 
 use App\Http\Controllers\Api\V1\LoginController;
-use Illuminate\Http\Request;
+use App\Http\Controllers\Api\V1\StoreBookingHourController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/user', function (Request $request) {
-    return $request->user();
-})->middleware('auth:sanctum');
+Route::middleware(['throttle:api'])->group(function () {
+    Route::prefix('v1')->group(function () {
+        Route::post('/login', LoginController::class);
 
-Route::prefix('v1')->group(function () {
-    Route::post('/login', LoginController::class);
+        Route::middleware('auth:sanctum')->group(function () {
+            Route::post('/store-booking-hour', StoreBookingHourController::class);
+        });
+    });
 });
+

@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('time_slots', function (Blueprint $table) {
             $table->id();
-            $table->time('time');
+            $table->time('time')->unique();
             $table->tinyInteger('is_active')->default(1);
             $table->timestamps();
 

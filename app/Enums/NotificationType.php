@@ -14,6 +14,15 @@ enum NotificationType: int
         return array_map(fn ($case) => $case->value, self::cases());
     }
 
+    public static function validValues(): array
+    {
+        return [
+            self::EMAIL->value,
+            self::SMS->value,
+            self::EMAIL->value | self::SMS->value,
+        ];
+    }
+
     public function label(): string
     {
         return match ($this) {
