@@ -8,11 +8,11 @@ use Exception;
 use Illuminate\Http\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 
-class StoreBookingHourException extends Exception
+class BookingHourCreationException extends Exception
 {
-    public function __construct()
+    public function __construct(string $message)
     {
-        parent::__construct('Time slot is no longer active.');
+        parent::__construct($message);
     }
 
     public function render(): JsonResponse

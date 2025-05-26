@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Interfaces\Api\V1;
 
-use App\DTOs\PersonalDataDto;
+use App\DTOs\StoreBookingHours\PersonalDataDto;
 use App\Models\PersonalData;
 
 interface PersonalDataRepositoryInterface

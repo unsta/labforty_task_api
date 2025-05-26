@@ -31,6 +31,7 @@ class StoreBookingHourRequest extends FormRequest
                     }
                 }
             ],
+
             'egn' => [
                 'required',
                 'string',
@@ -51,7 +52,7 @@ class StoreBookingHourRequest extends FormRequest
                 'integer',
                 'min:0',
                 function ($attribute, $value, $fail) {
-                    if (!in_array($value, NotificationType::validValues(), true)) {
+                    if (!in_array($value, NotificationType::validBitmaskValues(), true)) {
                         $fail('Invalid notification type!');
                     }
                 }

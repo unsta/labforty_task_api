@@ -16,10 +16,11 @@ return new class extends Migration
             $table->id();
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->binary('egn_encrypted')->nullable(); // For encrypted EGN
-            $table->string('egn_hash', 64)->nullable(); // For searching
+            $table->string('egn_hash', 64)->nullable(); // For verification
+            $table->string('egn_index', 64)->nullable(); // For querying
             $table->timestamps();
 
-            $table->index('egn_hash');
+            $table->index('egn_index');
         });
 
         DB::statement('ALTER TABLE personal_data MODIFY egn_encrypted VARBINARY(255)');

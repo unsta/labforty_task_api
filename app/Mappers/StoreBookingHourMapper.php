@@ -1,8 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Mappers;
 
-use App\DTOs\{BookingHourDto, PersonalDataDto, TimeSlotDto};
+use App\DTOs\StoreBookingHours\{BookingHourDto, PersonalDataDto, TimeSlotDto};
 use App\Enums\BookingStatus;
 use App\Http\Requests\Api\V1\StoreBookingHourRequest;
 

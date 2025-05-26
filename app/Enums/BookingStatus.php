@@ -13,4 +13,12 @@ enum BookingStatus: string
     {
         return array_map(fn ($case) => $case->value, self::cases());
     }
+
+    public function label(): string
+    {
+        return match($this) {
+            self::CONFIRMED => 'Confirmed',
+            self::CANCELED => 'Canceled',
+        };
+    }
 }
