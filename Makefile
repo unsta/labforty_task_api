@@ -16,3 +16,6 @@ phpstan-clear-cache:
 
 phpstan:
 	./vendor/bin/phpstan analyse --memory-limit=1G
+
+test-feature:
+	./vendor/bin/phpunit --testsuite Feature

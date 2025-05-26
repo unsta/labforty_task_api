@@ -17,12 +17,24 @@ class UserSeeder extends Seeder
     public function run(): void
     {
         DB::table('users')->insert([
-            'name' => 'John Doe',
-            'email' => 'john.doe@labforty.com',
-            'email_verified_at' => CarbonImmutable::now(),
-            'password' => Hash::make('password'),
-            'remember_token' => 'a@fdsdas34234dfsf345',
-            'created_at' => CarbonImmutable::now(),
+            [
+                'id' => 1,
+                'name' => 'John Doe',
+                'email' => 'john.doe@labforty.com',
+                'email_verified_at' => CarbonImmutable::now(),
+                'password' => Hash::make('password'),
+                'remember_token' => 'a@fdsdas34234dfsf345',
+                'created_at' => CarbonImmutable::now(),
+            ],
+            [
+                'id' => 2,
+                'name' => 'Bob Bobber',
+                'email' => 'bob.bobber@labforty.com',
+                'email_verified_at' => CarbonImmutable::now(),
+                'password' => Hash::make('password123'),
+                'remember_token' => 'a@fdsdas34234dfsf345',
+                'created_at' => CarbonImmutable::now(),
+            ]
         ]);
     }
 }
