@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Http\Services\Api\V1;
 
 use App\Http\Exceptions\Api\V1\BookingHourCreationException;
-use App\DTOs\{StoreBookingHours\BookingHourDto, StoreBookingHours\PersonalDataDto, StoreBookingHours\TimeSlotDto};
+use App\DTOs\StoreBookingHours\{BookingHourDto, PersonalDataDto, TimeSlotDto};
 use App\Http\Exceptions\Api\V1\TimeSlotInactiveException;
 use App\Http\Interfaces\Api\V1\BookingHourRepositoryInterface;
 use App\Http\Interfaces\Api\V1\PersonalDataRepositoryInterface;

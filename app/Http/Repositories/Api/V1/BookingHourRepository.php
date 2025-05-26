@@ -14,6 +14,23 @@ use Illuminate\Http\Resources\Json\ResourceCollection;
 
 class BookingHourRepository implements BookingHourRepositoryInterface
 {
+    public function find(int $id): BookingHour
+    {
+        $booking = BookingHour::find($id);
+
+        if (null === $booking) {
+            throw new EntityNotFoundException(BookingHour::class);
+        }
+
+        return $booking;
+    }
+
+    public function update(BookingHour $booking, array $data): BookingHourResource
+    {
+        $booking->update($data);
+        return new BookingHourResource($booking);
+    }
+
     public function store(BookingHourDto $dto, int $timeSlotId): void
     {
         BookingHour::create([
@@ -39,7 +56,7 @@ class BookingHourRepository implements BookingHourRepositoryInterface
         return BookingHourResource::collection($users);
     }
 
-    public function getBooking(int $id): BookingHourResource
+    public function getCurrentAndUpcomingBookings(int $id): BookingHourResource
     {
         $booking = BookingHour::with(['user.personalData', 'timeSlot'])->find($id);
 
