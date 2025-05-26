@@ -47,6 +47,16 @@ class BookingHourRepository implements BookingHourRepositoryInterface
             throw new EntityNotFoundException(BookingHour::class);
         }
 
-        return new BookingHourResource($booking);
+        $upcomingBookings = BookingHour::with('timeSlot')
+            ->where('user_id', $booking->user_id)
+            ->where('id', '!=', $booking->id)
+            ->where('booking_date', '>', $booking->booking_date)
+            ->orderBy('booking_date')
+            ->limit(5)
+            ->get();
+
+        return (new BookingHourResource($booking))->additional([
+            'upcoming_bookings' => BookingHourResource::collection($upcomingBookings),
+        ]);
     }
 }
