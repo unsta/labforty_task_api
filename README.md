@@ -1,61 +1,359 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Hotel Booking API
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+## Requirements:
+- Postman (https://www.postman.com/downloads/)
 
-## About Laravel
+## Project Set Up:
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+### Clone the project
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+    git clone git@github.com:unsta/labforty_task_api.git
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+### Create an `.env` file from `.env.example`
 
-## Learning Laravel
+### From the project directory run
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+    composer install
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+### To start the Docker containers in the background run
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+    ./vendor/bin/sail up -d
 
-## Laravel Sponsors
+Note: Make sure that all the containers are started successfully and there are no port conflicts!
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+### To generate an APP_KEY run
 
-### Premium Partners
+    ./vendor/bin/sail artisan key:generate
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+### Run the migrations
 
-## Contributing
+    ./vendor/bin/sail artisan migrate
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+### Run the seeders
 
-## Code of Conduct
+    ./vendor/bin/sail artisan db:seed
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+### Run code quality checks (Check the `app/Makefile`)
 
-## Security Vulnerabilities
+    make pipeline
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+### Run the Feature tests (Docker provides a testing db)
 
-## License
+    make test-feature
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+# Rest APIs
+
+The REST APIs to the LabForty home task are described below.
+
+Roles are implemented so that we have a better overview and control of the system.
+
+Currently, we have two users:
+- john.doe@labforty.com | Role: User
+- bob.bobber@labforty.com | Role: Admin
+
+Note: The `role:user` can only update/view/delete his/her bookings!
+
+Note: The `role:admin` can list the bookings! 
+
+Note: Assuming you are accessing the application via `localhost`.
+
+## #Login: Only authenticated users can access the APIs
+
+### Request
+
+`POST /api/v1/login`
+
+```bash
+curl --location --request POST 'localhost/api/v1/login' \
+--header 'Accept: application/json' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "email": "john.doe@labforty.com",
+    "password": "password"
+}'
+```
+
+### Response
+
+`HTTP 200 OK`
+
+```json
+{
+    "status": "success",
+    "message": "User logged in successfully",
+    "token": "2|twb1Ei84t3dQ1qXxwinQKGDH85zcxaFepnsIZLKW3d8787f9"
+}
+```
+
+Note: the TOKEN is needed for the rest of the requests!
+
+## #Create a new booking
+
+### Request
+
+`POST /api/v1/store-booking-hour`
+
+```bash
+curl --location --request POST 'localhost/api/v1/store-booking-hour' \
+--header 'Accept: application/json' \
+--header 'Content-Type: application/json' \
+--header 'Authorization: Bearer 2|twb1Ei84t3dQ1qXxwinQKGDH85zcxaFepnsIZLKW3d8787f9' \
+--data-raw '{
+    "booking_date": "2025-06-22",
+    "time": "13:30",
+    "egn": "9012175608",
+    "notification_types": 3
+}'
+```
+
+### Response
+
+`HTTP 201 Created`
+
+```json
+{
+    "status": "success",
+    "message": "Booking Hour was successfully created!"
+}
+```
+
+## #Get list of Bookings
+
+### Request
+
+`GET /api/v1/list-booking-hours`
+
+```bash
+curl --location --request GET 'localhost/api/v1/list-booking-hours' \
+--header 'Accept: application/json' \
+--header 'Content-Type: application/json' \
+--header 'Authorization: Bearer 2|twb1Ei84t3dQ1qXxwinQKGDH85zcxaFepnsIZLKW3d8787f9'
+```
+
+### Response
+
+`HTTP 200 OK`
+
+```json
+{
+    "data": [
+        {
+            "booking_date": "2025-06-02",
+            "description": null,
+            "notification_types": [
+                {
+                    "value": 2,
+                    "label": "SMS"
+                }
+            ],
+            "status": "confirmed",
+            "time_slot": {
+                "time": "10:00",
+                "is_active": true
+            },
+            "user": {
+                "name": "John Doe",
+                "personal_data": {
+                    "egn": "eyJpdiI6Ik1iV0V2VWdvQ2ptKzYzR29pT1dTWnc9PSIsInZhbHVlIjoiUHlaU3M5M0JuYTVkVHdIWlpvVGZYUT09IiwibWFjIjoiMWM1MTliMWMwYmZkNzgwOTI1N2NiYTIzMTg4MTAzNzVlYzQzOTJmOGUyNzg5NmQ2Njk3NzUzOWEwYWZkYjdhZiIsInRhZyI6IiJ9"
+                }
+            }
+        },
+        {
+            "booking_date": "2025-05-31",
+            "description": null,
+            "notification_types": [
+                {
+                    "value": 1,
+                    "label": "Email"
+                }
+            ],
+            "status": "confirmed",
+            "time_slot": {
+                "time": "11:30",
+                "is_active": true
+            },
+            "user": {
+                "name": "Bob Bobber",
+                "personal_data": {
+                    "egn": "eyJpdiI6Ilc3L3QyaDJQd2Q0a2ZidHZPWUdwTmc9PSIsInZhbHVlIjoibG5CVU5tZEFOVTNpRVRidVlpOGhBUT09IiwibWFjIjoiMTJjYTNmNzU5OWI3NWJjNTUwZDQ3ZTFhZGRiN2E4ZWNkZmQzNDA2NjQ1MWZmOGY1ZjAwNWU1NDVhOTAwYzg3MiIsInRhZyI6IiJ9"
+                }
+            }
+        },
+        {
+            "booking_date": "2025-06-22",
+            "description": null,
+            "notification_types": [
+                {
+                    "value": 1,
+                    "label": "Email"
+                },
+                {
+                    "value": 2,
+                    "label": "SMS"
+                }
+            ],
+            "status": "confirmed",
+            "time_slot": {
+                "time": "13:30",
+                "is_active": true
+            },
+            "user": {
+                "name": "John Doe",
+                "personal_data": {
+                    "egn": "eyJpdiI6Ik1iV0V2VWdvQ2ptKzYzR29pT1dTWnc9PSIsInZhbHVlIjoiUHlaU3M5M0JuYTVkVHdIWlpvVGZYUT09IiwibWFjIjoiMWM1MTliMWMwYmZkNzgwOTI1N2NiYTIzMTg4MTAzNzVlYzQzOTJmOGUyNzg5NmQ2Njk3NzUzOWEwYWZkYjdhZiIsInRhZyI6IiJ9"
+                }
+            }
+        }
+    ],
+    "links": {
+        "first": "http://localhost/api/v1/list-booking-hours?page=1",
+        "last": "http://localhost/api/v1/list-booking-hours?page=1",
+        "prev": null,
+        "next": null
+    },
+    "meta": {
+        "current_page": 1,
+        "from": 1,
+        "last_page": 1,
+        "links": [
+            {
+                "url": null,
+                "label": "&laquo; Previous",
+                "active": false
+            },
+            {
+                "url": "http://localhost/api/v1/list-booking-hours?page=1",
+                "label": "1",
+                "active": true
+            },
+            {
+                "url": null,
+                "label": "Next &raquo;",
+                "active": false
+            }
+        ],
+        "path": "http://localhost/api/v1/list-booking-hours",
+        "per_page": 15,
+        "to": 3,
+        "total": 3
+    }
+}
+```
+
+## #Show Booking Hour
+
+### Request
+
+`GET /api/v1/show-booking-hour/{id}`
+
+```bash
+curl --location --request GET 'localhost/api/v1/show-booking-hour/{id}' \
+--header 'Accept: application/json' \
+--header 'Content-Type: application/json' \
+--header 'Authorization: Bearer 1|dDWeNPvfCyoIlM6lExjzlLqeThohewkGcvhWQIo0a0257485'
+```
+
+### Response
+
+`HTTP 200 OK`
+
+```json
+{
+    "data": {
+        "booking_date": "2025-06-02",
+        "description": null,
+        "notification_types": [
+            {
+                "value": 2,
+                "label": "SMS"
+            }
+        ],
+        "status": "confirmed",
+        "time_slot": {
+            "time": "10:00",
+            "is_active": true
+        },
+        "user": {
+            "name": "John Doe",
+            "personal_data": {
+                "egn": "eyJpdiI6Ik1iV0V2VWdvQ2ptKzYzR29pT1dTWnc9PSIsInZhbHVlIjoiUHlaU3M5M0JuYTVkVHdIWlpvVGZYUT09IiwibWFjIjoiMWM1MTliMWMwYmZkNzgwOTI1N2NiYTIzMTg4MTAzNzVlYzQzOTJmOGUyNzg5NmQ2Njk3NzUzOWEwYWZkYjdhZiIsInRhZyI6IiJ9"
+            }
+        }
+    },
+    "upcoming_bookings": []
+}
+```
+
+
+## #Edit Booking Hour
+
+`PATCH /api/v1/update-booking-hour/{id}}`
+
+```bash
+curl --location --request PATCH 'localhost/api/v1/update-booking-hour/{id}}' \
+--header 'Accept: application/json' \
+--header 'Content-Type: application/json' \
+--header 'Authorization: Bearer 1|dDWeNPvfCyoIlM6lExjzlLqeThohewkGcvhWQIo0a0257485' \
+--data-raw '{
+    "booking_date": "2025-06-22",
+    "time": "13:30",
+    "notification_types": 3
+}'
+```
+
+### Response
+
+`HTTP 200 OK`
+
+```json
+{
+    "data": {
+        "booking_date": "2025-06-22",
+        "description": null,
+        "notification_types": [
+            {
+                "value": 1,
+                "label": "Email"
+            },
+            {
+                "value": 2,
+                "label": "SMS"
+            }
+        ],
+        "status": "confirmed"
+    }
+}
+```
+## #Delete Booking Hour
+
+### Request
+
+`DELETE /api/v1/destroy-booking-hour/2`
+
+```bash
+curl --location --request DELETE 'localhost/api/v1/destroy-booking-hour/{id}' \
+--header 'Accept: application/json' \
+--header 'Content-Type: application/json' \
+--header 'Authorization: Bearer 1|dDWeNPvfCyoIlM6lExjzlLqeThohewkGcvhWQIo0a0257485'
+```
+
+### Response
+
+`HTTP 200 OK`
+
+```json
+{
+    "message": "Booking hour soft-deleted successfully."
+}
+```
+
+Note: A soft-delete is done and the status is changed to `canceled`!
+
+# Future Ideas/Improvements
+- `laminas/laminas-hydrator`
+- `Laravel Queues`
+- `Caching`
+- `V2 of the APIs`
+- `DDD`
+- `More roles & permissions`
+- `Front-end implementation`
