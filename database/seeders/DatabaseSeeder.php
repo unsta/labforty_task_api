@@ -19,6 +19,7 @@ class DatabaseSeeder extends Seeder
             PersonalDataSeeder::class,
             TimeSlotSeeder::class,
             BookingHourSeeder::class,
+            RoleSeeder::class,
         ]);
     }
 }

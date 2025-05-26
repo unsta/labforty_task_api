@@ -12,9 +12,12 @@ Route::middleware(['throttle:api'])->group(function () {
     Route::prefix('v1')->group(function () {
         Route::post('/login', LoginController::class);
 
-        Route::middleware('auth:sanctum')->group(function () {
-            Route::post('/store-booking-hour', StoreBookingHourController::class);
+        Route::middleware(['auth:sanctum', 'role:admin'])->group(function () {
             Route::get('/list-booking-hours', ListBookingHoursController::class);
+        });
+
+        Route::middleware(['auth:sanctum', 'role:user'])->group(function () {
+            Route::post('/store-booking-hour', StoreBookingHourController::class);
             Route::get('/show-booking-hour/{id}', ShowBookingHourController::class);
             Route::patch('/update-booking-hour/{id}', UpdateBookingHourController::class);
             Route::delete('/destroy-booking-hour/{id}', DestroyBookingHourController::class);
