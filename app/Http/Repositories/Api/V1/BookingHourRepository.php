@@ -6,8 +6,9 @@ namespace App\Http\Repositories\Api\V1;
 
 use App\DTOs\ListBookedHours\BookingHourDto as ListBookedHoursDto;
 use App\DTOs\StoreBookingHours\BookingHourDto;
+use App\Http\Exceptions\Api\V1\EntityNotFoundException;
 use App\Http\Interfaces\Api\V1\BookingHourRepositoryInterface;
-use App\Http\Resources\Api\V1\ListBookingHours\BookingHourResource;
+use App\Http\Resources\Api\V1\BookingHourResource;
 use App\Models\BookingHour;
 use Illuminate\Http\Resources\Json\ResourceCollection;
 
@@ -36,5 +37,16 @@ class BookingHourRepository implements BookingHourRepositoryInterface
             ->paginate(15);
 
         return BookingHourResource::collection($users);
+    }
+
+    public function getBooking(int $id): BookingHourResource
+    {
+        $booking = BookingHour::with(['user.personalData', 'timeSlot'])->find($id);
+
+        if (null === $booking) {
+            throw new EntityNotFoundException(BookingHour::class);
+        }
+
+        return new BookingHourResource($booking);
     }
 }

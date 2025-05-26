@@ -2,17 +2,18 @@
 
 declare(strict_types=1);
 
-namespace App\Http\Resources\Api\V1\ListBookingHours;
+namespace App\Http\Resources\Api\V1;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class PersonalDataResource extends JsonResource
+class TimeSlotResource extends JsonResource
 {
     public function toArray(Request $request): array
     {
         return [
-            'egn' => $this->egn_encrypted,
+            'time' => $this->time?->format('H:i'),
+            'is_active' => $this->is_active,
         ];
     }
 }
