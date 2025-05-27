@@ -10,8 +10,11 @@ use App\Http\Repositories\Api\V1\LoginRepository;
 use App\Http\Repositories\Api\V1\BookingHourRepository;
 use App\Http\Repositories\Api\V1\PersonalDataRepository;
 use App\Http\Repositories\Api\V1\TimeSlotRepository;
+use App\Models\BookingHour;
+use App\Policies\BookingHourPolicy;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\ServiceProvider;
 
@@ -33,6 +36,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        Gate::policy(BookingHour::class, BookingHourPolicy::class,);
+
         RateLimiter::for('api', function (Request $request) {
             return Limit::perMinute(60)->by($request->user()?->id ?: $request->ip());
         });

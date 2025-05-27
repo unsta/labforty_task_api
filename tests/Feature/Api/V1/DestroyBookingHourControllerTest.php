@@ -7,12 +7,13 @@ namespace Feature\Api\V1;
 use App\Enums\BookingStatus;
 use App\Models\{BookingHour, TimeSlot, User};
 use Carbon\CarbonImmutable;
-use Illuminate\Foundation\Testing\{RefreshDatabase, WithoutMiddleware};
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Spatie\Permission\Models\Role;
 use Tests\TestCase;
 
 class DestroyBookingHourControllerTest extends TestCase
 {
-    use WithoutMiddleware, RefreshDatabase;
+    use RefreshDatabase;
 
     private string $endpoint;
     private array $headers;
@@ -30,7 +31,9 @@ class DestroyBookingHourControllerTest extends TestCase
     public function test_invoke(): void
     {
         $user = User::factory()->create();
-        $this->actingAs($user);
+
+        $roleUser = Role::create(['name' => 'user']);
+        $user->assignRole($roleUser);
 
         $timeSlot = TimeSlot::factory()->create();
 
@@ -39,7 +42,9 @@ class DestroyBookingHourControllerTest extends TestCase
             'time_slot_id' => $timeSlot->id,
         ]);
 
-        $response = $this->delete($this->endpoint . $bookingHour->id, $this->headers);
+        $response = $this->actingAs($user)
+            ->delete(route('destroy-booking-hour', $bookingHour), $this->headers);
+
         $response->assertOk();
 
         $this->assertSoftDeleted('booking_hours', ['id' => $bookingHour->id]);
@@ -50,7 +55,10 @@ class DestroyBookingHourControllerTest extends TestCase
     {
         $user1 = User::factory()->create();
         $user2 = User::factory()->create();
-        $this->actingAs($user2);
+
+        $roleUser = Role::create(['name' => 'user']);
+        $user1->assignRole($roleUser);
+        $user2->assignRole($roleUser);
 
         $timeSlot = TimeSlot::factory()->create();
 
@@ -59,9 +67,12 @@ class DestroyBookingHourControllerTest extends TestCase
             'time_slot_id' => $timeSlot->id,
         ]);
 
-        $this->delete($this->endpoint . $bookingHour->id, $this->headers)
-            ->assertStatus(401)
-            ->assertJson(['message' => 'You are not authorized to update this booking.'])
+        $response = $this->actingAs($user2)
+            ->deleteJson(route('destroy-booking-hour', $bookingHour), $this->headers);
+
+        $response
+            ->assertStatus(403)
+            ->assertJson(['message' => 'This action is unauthorized.'])
         ;
     }
 }

@@ -18,9 +18,15 @@ Route::middleware(['throttle:api'])->group(function () {
 
         Route::middleware(['auth:sanctum', 'role:user'])->group(function () {
             Route::post('/store-booking-hour', StoreBookingHourController::class);
-            Route::get('/show-booking-hour/{id}', ShowBookingHourController::class);
-            Route::patch('/update-booking-hour/{id}', UpdateBookingHourController::class);
-            Route::delete('/destroy-booking-hour/{id}', DestroyBookingHourController::class);
+
+            Route::get('/show-booking-hour/{bookingHour}', ShowBookingHourController::class)
+                ->name('show-booking-hour');
+
+            Route::patch('/update-booking-hour/{bookingHour}', UpdateBookingHourController::class)
+                ->name('update-booking-hour');
+
+            Route::delete('/destroy-booking-hour/{bookingHour}', DestroyBookingHourController::class)
+                ->name('destroy-booking-hour');
         });
     });
 });

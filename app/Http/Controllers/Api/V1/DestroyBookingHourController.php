@@ -5,7 +5,9 @@ declare(strict_types=1);
 namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Services\Api\V1\DestroyBookingHourService;
+use App\Models\BookingHour;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Gate;
 
 readonly class DestroyBookingHourController
 {
@@ -13,9 +15,11 @@ readonly class DestroyBookingHourController
     {
     }
 
-    public function __invoke(int $bookingHourId): JsonResponse
+    public function __invoke(BookingHour $bookingHour): JsonResponse
     {
-        $this->service->softDelete($bookingHourId);
+        Gate::authorize('update', $bookingHour);
+        $this->service->softDelete($bookingHour);
+
         return response()->json(['message' => 'Booking hour soft-deleted successfully.']);
     }
 }

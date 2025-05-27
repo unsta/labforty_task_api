@@ -7,6 +7,8 @@ namespace App\Http\Controllers\Api\V1;
 use App\Http\Requests\Api\V1\UpdateBookingHourRequest;
 use App\Http\Resources\Api\V1\BookingHourResource;
 use App\Http\Services\Api\V1\UpdateBookingHourService;
+use App\Models\BookingHour;
+use Illuminate\Support\Facades\Gate;
 
 readonly class UpdateBookingHourController
 {
@@ -14,8 +16,9 @@ readonly class UpdateBookingHourController
     {
     }
 
-    public function __invoke(UpdateBookingHourRequest $request, int $bookingHourId): BookingHourResource
+    public function __invoke(UpdateBookingHourRequest $request, BookingHour $bookingHour): BookingHourResource
     {
-        return $this->service->update($bookingHourId, $request->validated());
+        Gate::authorize('update', $bookingHour);
+        return $this->service->update($bookingHour, $request->validated());
     }
 }

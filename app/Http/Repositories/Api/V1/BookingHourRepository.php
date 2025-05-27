@@ -15,17 +15,6 @@ use Illuminate\Http\Resources\Json\ResourceCollection;
 
 class BookingHourRepository implements BookingHourRepositoryInterface
 {
-    public function find(int $id): BookingHour
-    {
-        $booking = BookingHour::find($id);
-
-        if (null === $booking) {
-            throw new EntityNotFoundException(BookingHour::class);
-        }
-
-        return $booking;
-    }
-
     public function update(BookingHour $booking, array $data): BookingHourResource
     {
         $booking->update($data);

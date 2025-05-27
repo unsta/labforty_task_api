@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Feature\Api\V1;
 
+use Spatie\Permission\Models\Role;
 use App\Models\{TimeSlot, User};
 use Carbon\CarbonImmutable;
 use Illuminate\Foundation\Testing\{RefreshDatabase, WithoutMiddleware};
@@ -37,6 +38,9 @@ class StoreBookingHourControllerTest extends TestCase
 
         $user = User::factory()->create();
         $this->actingAs($user);
+
+        $roleUser = Role::create(['name' => 'user']);
+        $user->assignRole($roleUser);
 
         $timeSlot = TimeSlot::factory()->create(
             ['time' => '13:30']

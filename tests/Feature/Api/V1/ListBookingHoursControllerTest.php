@@ -9,6 +9,7 @@ use App\Models\{BookingHour, PersonalData, TimeSlot, User};
 use Carbon\CarbonImmutable;
 use Database\Seeders\TimeSlotSeeder;
 use Illuminate\Foundation\Testing\{RefreshDatabase, WithoutMiddleware};
+use Spatie\Permission\Models\Role;
 use Tests\TestCase;
 
 class ListBookingHoursControllerTest extends TestCase
@@ -50,6 +51,12 @@ class ListBookingHoursControllerTest extends TestCase
             'email' => 'bob.bobber@labforty.com'
         ]);
         $this->actingAs($user1);
+
+        $roleUser = Role::create(['name' => 'user']);
+        $user1->assignRole($roleUser);
+
+        $roleAdmin = Role::create(['name' => 'admin']);
+        $user2->assignRole($roleAdmin);
 
         PersonalData::factory()->count(2)->sequence(
             [
