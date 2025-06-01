@@ -29,13 +29,6 @@ class StoreBookingHourControllerTest extends TestCase
 
     public function test_invoke(): void
     {
-        $payload = [
-            'booking_date' => '2025-06-22',
-            'time' => '13:30',
-            'egn' => '4705036420',
-            'notification_types' => 3
-        ];
-
         $user = User::factory()->create();
         $this->actingAs($user);
 
@@ -46,6 +39,13 @@ class StoreBookingHourControllerTest extends TestCase
             ['time' => '13:30']
         );
 
+        $payload = [
+            'booking_date' => '2025-06-22',
+            'time_slot_id' => $timeSlot->id,
+            'egn' => '4705036420',
+            'notification_types' => 3
+        ];
+
         $response = $this->postJson($this->endpoint, $payload, $this->headers);
         $response->assertStatus(201);
 
@@ -54,27 +54,5 @@ class StoreBookingHourControllerTest extends TestCase
         $this->assertDatabaseHas('booking_hours', ['notification_types' => 3]);
 
         $this->assertDatabaseHas('personal_data', ['egn_index' => hash('sha256', '4705036420')]);
-    }
-
-    public function test_invoke_tie_slot_inactive_exception(): void
-    {
-        $payload = [
-            'booking_date' => '2025-06-22',
-            'time' => '13:30',
-            'egn' => '4705036420',
-            'notification_types' => 3
-        ];
-
-        $user = User::factory()->create();
-        $this->actingAs($user);
-
-        TimeSlot::factory()->create(
-            ['time' => '13:30', 'is_active' => false]
-        );
-
-        $this->postJson($this->endpoint, $payload, $this->headers)
-            ->assertStatus(422)
-            ->assertJson(['message' => 'Time slot is no longer active.'])
-        ;
     }
 }

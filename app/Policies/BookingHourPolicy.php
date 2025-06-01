@@ -4,6 +4,7 @@ namespace App\Policies;
 
 use App\Models\BookingHour;
 use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 
 class BookingHourPolicy
 {
@@ -12,6 +13,10 @@ class BookingHourPolicy
      */
     public function view(User $user, BookingHour $bookingHour): bool
     {
+        if (in_array('admin', Auth::user()->getRoleNames()->toArray(), true)) {
+            return true;
+        }
+
         return $user->id === $bookingHour->user_id;
     }
 

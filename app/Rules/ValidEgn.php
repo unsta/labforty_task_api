@@ -7,7 +7,7 @@ namespace App\Rules;
 use Closure;
 use Illuminate\Contracts\Validation\ValidationRule;
 
-class Egn implements ValidationRule
+class ValidEgn implements ValidationRule
 {
     public function validate(string $attribute, mixed $value, Closure $fail): void
     {

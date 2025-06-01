@@ -1,4 +1,4 @@
-# Hotel Booking API
+# Booking API
 
 ## Requirements:
 - Postman (https://www.postman.com/downloads/)
@@ -48,12 +48,13 @@ The REST APIs to the LabForty home task are described below.
 Roles are implemented so that we have a better overview and control of the system.
 
 Currently, we have two users:
-- john.doe@labforty.com | Role: User
-- bob.bobber@labforty.com | Role: Admin
+- john.doe@labforty.com | password | Role: User
+- jane.doe@labforty.com | password456 | Role: User
+- bob.bobber@labforty.com | password123 | Role: Admin
 
-Note: The `role:user` can only update/view/delete his/her bookings!
+Note: The `role:user` can list/update/view/delete own bookings!
 
-Note: The `role:admin` can list the bookings! 
+Note: The `role:admin` can only list and view the bookings! (list with extended filters) 
 
 Note: Assuming you are accessing the application via `localhost`.
 
@@ -100,8 +101,8 @@ curl --location --request POST 'localhost/api/v1/store-booking-hour' \
 --header 'Authorization: Bearer 2|twb1Ei84t3dQ1qXxwinQKGDH85zcxaFepnsIZLKW3d8787f9' \
 --data-raw '{
     "booking_date": "2025-06-22",
-    "time": "13:30",
-    "egn": "9012175608",
+    "time_slot_id": 2,
+    "egn": "3208080983",
     "notification_types": 3
 }'
 ```
@@ -296,7 +297,7 @@ curl --location --request PATCH 'localhost/api/v1/update-booking-hour/{id}}' \
 --header 'Authorization: Bearer 1|dDWeNPvfCyoIlM6lExjzlLqeThohewkGcvhWQIo0a0257485' \
 --data-raw '{
     "booking_date": "2025-06-22",
-    "time": "13:30",
+    "time_slot_id": 1,
     "notification_types": 3
 }'
 ```
@@ -356,4 +357,4 @@ Note: A soft-delete is done and the status is changed to `canceled`!
 - `V2 of the APIs`
 - `DDD`
 - `More roles & permissions`
-- `Front-end implementation`
+- `Cron/Worker to mark past bookings as completed`

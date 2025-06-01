@@ -34,7 +34,16 @@ class UserSeeder extends Seeder
                 'password' => Hash::make('password123'),
                 'remember_token' => 'a@fdsdas34234dfsf345',
                 'created_at' => CarbonImmutable::now(),
-            ]
+            ],
+            [
+                'id' => 3,
+                'name' => 'Jane Doe',
+                'email' => 'jane.doe@labforty.com',
+                'email_verified_at' => CarbonImmutable::now(),
+                'password' => Hash::make('password456'),
+                'remember_token' => 'a@fdsdas34234dfsf345',
+                'created_at' => CarbonImmutable::now(),
+            ],
         ]);
     }
 }

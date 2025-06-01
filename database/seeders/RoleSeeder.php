@@ -24,8 +24,10 @@ class RoleSeeder extends Seeder
 
         $user1 = User::where('email', 'john.doe@labforty.com')->first();
         $user2 = User::where('email', 'bob.bobber@labforty.com')->first();
+        $user3 = User::where('email', 'jane.doe@labforty.com')->first();
 
         $user1?->assignRole($roleUser);
         $user2?->assignRole($roleAdmin);
+        $user3?->assignRole($roleUser);
     }
 }

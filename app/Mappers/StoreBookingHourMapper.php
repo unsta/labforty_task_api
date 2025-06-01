@@ -27,7 +27,7 @@ readonly class StoreBookingHourMapper
                 userId: auth()->id(),
             ),
             new TimeSlotDto(
-                time: $data['time'],
+                timeSlotId: $data['time_slot_id'],
             ),
         ];
     }

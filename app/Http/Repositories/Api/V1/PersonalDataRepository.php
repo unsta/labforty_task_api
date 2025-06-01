@@ -13,11 +13,13 @@ class PersonalDataRepository implements PersonalDataRepositoryInterface
 {
     public function store(PersonalDataDto $dto): PersonalData
     {
-        return PersonalData::create([
-            'user_id' => $dto->userId,
-            'egn_encrypted' => EgnHelper::encrypt($dto->egn),
-            'egn_hash' => EgnHelper::hash($dto->egn),
-            'egn_index' => hash('sha256', $dto->egn),
-        ]);
+        return PersonalData::updateOrCreate(
+            ['user_id' => $dto->userId],
+            [
+                'egn_encrypted' => EgnHelper::encrypt($dto->egn),
+                'egn_hash' => EgnHelper::hash($dto->egn),
+                'egn_index' => hash('sha256', $dto->egn),
+            ]
+        );
     }
 }

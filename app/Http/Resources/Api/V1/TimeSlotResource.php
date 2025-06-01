@@ -12,6 +12,7 @@ class TimeSlotResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
+            'id' => $this->id,
             'time' => $this->time?->format('H:i'),
             'is_active' => $this->is_active,
         ];

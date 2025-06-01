@@ -5,9 +5,12 @@ declare(strict_types=1);
 namespace App\Http\Requests\Api\V1;
 
 use App\Enums\NotificationType;
-use App\Rules\Egn;
+use App\Rules\ValidEgn;
+use App\Rules\UniqueBooking;
+use App\Rules\ValidNotificationTypes;
 use Carbon\CarbonImmutable;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Auth;
 
 class StoreBookingHourRequest extends FormRequest
 {
@@ -20,16 +23,16 @@ class StoreBookingHourRequest extends FormRequest
                 'after_or_equal:today',
             ],
 
-            'time' => [
+            'time_slot_id' => [
                 'required',
-                'date_format:H:i',
-                'exists:time_slots',
-                function ($attribute, $value, $fail) {
-                    $minutes = CarbonImmutable::parse($value)->format('i');
-                    if (!in_array($minutes, ['00', '30'], true)) {
-                        $fail('Booking time must be at 30-minute interval!');
-                    }
-                }
+                'integer',
+                'exists:time_slots,id',
+                new UniqueBooking(
+                    $this->input('booking_date'),
+                    $this->input('time_slot_id'),
+                    Auth::id(),
+                    null
+                ),
             ],
 
             'egn' => [
@@ -37,7 +40,7 @@ class StoreBookingHourRequest extends FormRequest
                 'string',
                 'size:10',
                 'regex:/^[0-9]{10}$/',
-                new Egn(),
+                new ValidEgn(),
             ],
 
             'description' => [
@@ -51,11 +54,7 @@ class StoreBookingHourRequest extends FormRequest
                 'required',
                 'integer',
                 'min:0',
-                function ($attribute, $value, $fail) {
-                    if (!in_array($value, NotificationType::validBitmaskValues(), true)) {
-                        $fail('Invalid notification type!');
-                    }
-                }
+                new ValidNotificationTypes(),
             ],
         ];
     }

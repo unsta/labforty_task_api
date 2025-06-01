@@ -12,6 +12,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Auth;
 
 class BookingHour extends Model
 {
@@ -65,5 +66,13 @@ class BookingHour extends Model
     protected function booked(Builder $query): void
     {
         $query->whereNotNull('user_id');
+    }
+
+    #[Scope]
+    protected function roleBased(Builder $query): void
+    {
+        if (in_array('user', Auth::user()->getRoleNames()->toArray(), true)) {
+            $query->where('user_id', Auth::user()?->id);
+        }
     }
 }

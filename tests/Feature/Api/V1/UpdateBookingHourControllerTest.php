@@ -29,12 +29,6 @@ class UpdateBookingHourControllerTest extends TestCase
 
     public function test_invoke(): void
     {
-        $payload = [
-            'booking_date' => '2025-06-22',
-            'time' => '13:30',
-            'notification_types' => 3
-        ];
-
         $user = User::factory()->create();
 
         $roleUser = Role::create(['name' => 'user']);
@@ -53,23 +47,24 @@ class UpdateBookingHourControllerTest extends TestCase
             'time_slot_id' => $timeSlot1->id,
         ]);
 
+        $payload = [
+            'booking_date' => '2025-06-22',
+            'time_slot_id' => $timeSlot1->id,
+            'egn' => '3208080983',
+            'notification_types' => 3
+        ];
+
         $response = $this->actingAs($user)
             ->patchJson(route('update-booking-hour', $bookingHour), $payload, $this->headers);
         $response->assertOk();
 
         $this->assertDatabaseHas('booking_hours', ['booking_date' => '2025-06-22']);
-        $this->assertDatabaseHas('booking_hours', ['time_slot_id' => $timeSlot2->id]);
+        $this->assertDatabaseHas('booking_hours', ['time_slot_id' => $timeSlot1->id]);
         $this->assertDatabaseHas('booking_hours', ['notification_types' => 3]);
     }
 
     public function test_invoke_authorized_exception(): void
     {
-        $payload = [
-            'booking_date' => '2025-06-22',
-            'time' => '13:30',
-            'notification_types' => 3
-        ];
-
         $user1 = User::factory()->create();
         $user2 = User::factory()->create();
 
@@ -88,6 +83,13 @@ class UpdateBookingHourControllerTest extends TestCase
             'user_id' => $user1->id,
             'time_slot_id' => $timeSlot1->id,
         ]);
+
+        $payload = [
+            'booking_date' => '2025-06-22',
+            'time_slot_id' => $timeSlot1->id,
+            'egn' => '3208080983',
+            'notification_types' => 3
+        ];
 
         $this->actingAs($user2)
             ->patchJson(route('update-booking-hour', $bookingHour), $payload, $this->headers)

@@ -19,10 +19,6 @@ readonly class UpdateBookingHourService
 
     public function update(BookingHour $bookingHour, array $data): BookingHourResource
     {
-        $timeSlot = $this->timeSlotRepository->findOneByTimeAndStatus($data['time']);
-
-        $data['time_slot_id'] = $timeSlot->id;
-
         return $this->bookingHourRepository->update($bookingHour, $data);
     }
 }

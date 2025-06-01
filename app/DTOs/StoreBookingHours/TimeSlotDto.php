@@ -7,6 +7,6 @@ namespace App\DTOs\StoreBookingHours;
 readonly class TimeSlotDto
 {
     public function __construct(
-        public string $time,
+        public int $timeSlotId,
     ) {}
 }

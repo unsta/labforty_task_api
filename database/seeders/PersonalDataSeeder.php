@@ -30,6 +30,13 @@ class PersonalDataSeeder extends Seeder
                 'egn_hash' => EgnHelper::hash('4705036420'),
                 'egn_index' => hash('sha256', '4705036420'),
                 'created_at' => CarbonImmutable::now(),
+            ],
+            [
+                'user_id' => 3,
+                'egn_encrypted' => EgnHelper::encrypt('3010193772'),
+                'egn_hash' => EgnHelper::hash('3010193772'),
+                'egn_index' => hash('sha256', '3010193772'),
+                'created_at' => CarbonImmutable::now(),
             ]
         ]);
     }

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Requests\Api\V1;
 
-use App\Rules\Egn;
+use App\Rules\ValidEgn;
 use Illuminate\Foundation\Http\FormRequest;
 
 class ListBookingHoursRequest extends FormRequest
@@ -27,7 +27,7 @@ class ListBookingHoursRequest extends FormRequest
                 'string',
                 'size:10',
                 'regex:/^[0-9]{10}$/',
-                new Egn(),
+                new ValidEgn(),
             ],
         ];
     }

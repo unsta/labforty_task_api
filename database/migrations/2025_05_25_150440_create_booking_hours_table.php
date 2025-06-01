@@ -25,6 +25,7 @@ return new class extends Migration
             $table->softDeletes();
 
             $table->index('booking_date');
+            $table->unique(['booking_date', 'time_slot_id', 'user_id']);
         });
     }
 

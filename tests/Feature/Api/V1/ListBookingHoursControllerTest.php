@@ -35,7 +35,7 @@ class ListBookingHoursControllerTest extends TestCase
 
         $response = $this->getJson($this->endpoint, $this->headers);
         $response->assertOk();
-        $this->assertCount(2, $response->json()['data']);
+        $this->assertCount(1, $response->json()['data']);
     }
 
     private function prepareDatabase(): void

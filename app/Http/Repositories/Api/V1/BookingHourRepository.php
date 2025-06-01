@@ -15,6 +15,8 @@ use Illuminate\Http\Resources\Json\ResourceCollection;
 
 class BookingHourRepository implements BookingHourRepositoryInterface
 {
+    private const int PER_PAGE = 5;
+
     public function update(BookingHour $booking, array $data): BookingHourResource
     {
         $booking->update($data);
@@ -39,9 +41,11 @@ class BookingHourRepository implements BookingHourRepositoryInterface
             ->dateFrom($dto->dateFrom)
             ->dateTo($dto->dateTo)
             ->booked()
+            ->roleBased()
             ->when($egn, fn($q) => $q->whereHas('user.personalData', fn($q) => $q->egn($egn)))
             ->with(['user.personalData', 'timeSlot'])
-            ->paginate(15);
+            ->orderBy('booking_date', 'asc')
+            ->paginate(self::PER_PAGE);
 
         return BookingHourResource::collection($users);
     }
